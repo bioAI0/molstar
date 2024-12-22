@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2020-2024 mol* contributors, licensed under MIT, See LICENSE file for more info.
- *
- * @author Alexander Rose <alexander.rose@weirdbyte.de>
- */
-
 import { presetStaticComponent, StructureRepresentationPresetProvider } from '../../mol-plugin-state/builder/structure/representation-preset';
 import { StructureRef } from '../../mol-plugin-state/manager/structure/hierarchy-state';
 import { PluginUIComponent } from '../../mol-plugin-ui/base';
