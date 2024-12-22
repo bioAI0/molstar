@@ -269,6 +269,7 @@ export class Viewer {
     }
 
     loadPdb(pdb: string, options?: LoadStructureOptions) {
+        debugger;
         const params = DownloadStructure.createDefaultParams(this.plugin.state.data.root.obj!, this.plugin);
         const provider = this.plugin.config.get(PluginConfig.Download.DefaultPdbProvider)!;
         return this.plugin.runTask(this.plugin.state.data.applyAction(DownloadStructure, {
@@ -318,6 +319,11 @@ export class Viewer {
                 }
             }
         }));
+    }
+
+    test() {
+        console.log("test123");
+        debugger;
     }
 
     loadAlphaFoldDb(afdb: string) {

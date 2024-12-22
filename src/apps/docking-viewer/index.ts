@@ -142,7 +142,7 @@ class Viewer {
             settings: {
                 renderer: {
                     ...plugin.canvas3d!.props.renderer,
-                    backgroundColor: ColorNames.white,
+                    backgroundColor: ColorNames.black,
                 },
                 camera: {
                     ...plugin.canvas3d!.props.camera,

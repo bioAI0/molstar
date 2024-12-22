@@ -123,6 +123,8 @@
                 var modelArchive = getParam('model-archive', '[^&]+').trim();
                 if (modelArchive) viewer.loadModelArchive(modelArchive);
 
+                debugger;
+                
                 window.addEventListener('unload', () => {
                     // to aid GC
                     viewer.dispose();

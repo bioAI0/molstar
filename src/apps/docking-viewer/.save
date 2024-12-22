@@ -1,4 +1,41 @@
-/**
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <title>Mol* Docking Viewer</title>
+        <style>
+            #app {
+                position: absolute;
+                left: 100px;
+                top: 100px;
+                width: 800px;
+                height: 600px;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" href="molstar.css" />
+    </head>
+    <body>
+        <div id="app"></div>
+        <script type="text/javascript" src="./molstar.js"></script>
+        <script type="text/javascript">
+            function getParam(name, regex) {
+                var r = new RegExp(name + '=' + '(' + regex + ')[&]?', 'i');
+                return decodeURIComponent(((window.location.search || '').match(r) || [])[1] || '');
+            }
+            var pdbqt = getParam('pdbqt', '[^&]+').trim() || '../../examples/ace2.pdbqt';
+            var mol2 = getParam('mol2', '[^&]+').trim() || '../../examples/ace2-hit.mol2';
+
+            DockingViewer.create('app', [0x33DD22, 0x1133EE], true).then(viewer => {
+                viewer.loadStructuresFromUrlsAndMerge([
+                    { url: pdbqt, format: 'pdbqt' },
+                    { url: mol2, format: 'mol2' }
+                ]);
+            });
+        </script>
+    </body>
+</html>/**
  * Copyright (c) 2020-2024 mol* contributors, licensed under MIT, See LICENSE file for more info.
  *
  * @author Alexander Rose <alexander.rose@weirdbyte.de>
@@ -11,6 +48,7 @@ import { StructureSelectionQueries, StructureSelectionQuery } from '../../mol-pl
 import { StructureRef } from '../../mol-plugin-state/manager/structure/hierarchy-state';
 import { PluginUIComponent } from '../../mol-plugin-ui/base';
 import { LociLabels } from '../../mol-plugin-ui/controls';
+import { Button } from '../../mol-plugin-ui/controls/common';
 import { BackgroundTaskProgress } from '../../mol-plugin-ui/task';
 import { Toasts } from '../../mol-plugin-ui/toast';
 import { Viewport, ViewportControls } from '../../mol-plugin-ui/viewport';
@@ -226,25 +264,6 @@ export class ViewportComponent extends PluginUIComponent {
         // Add any additional logic you want to perform with the input value
     };
 
-    // Handler for the input key press event
-    handleInputKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter') {
-            const value = event.currentTarget.value;
-            console.log('Enter pressed. Input Value:', value);
-            // Execute desired function with the input value
-            this.processInput(value);
-        }
-    };
-
-    // Custom function to process input
-    processInput = (value: string) => {
-        // Define what you want to do with the input value
-        // For example, applying a custom representation based on user input
-        console.log('Processing Input:', value);
-        // Example: Search for a specific residue or feature
-        // Implement your custom logic here
-    };
-
     async _set(structures: readonly StructureRef[], preset: StructureRepresentationPresetProvider) {
         await this.plugin.managers.structure.component.clear(structures);
         await this.plugin.managers.structure.component.applyPreset(structures, preset);
@@ -270,26 +289,14 @@ export class ViewportComponent extends PluginUIComponent {
         return <>
             <Viewport />
             {this.showButtons && <div className='msp-viewport-top-left-controls'>
-
-
-                <div
-                    style={{
-                          position: 'fixed',
-                          bottom: 0,
-                          left: 0,
-                          width: '100%',
-                          padding: '8px',
-                          backgroundColor: '#fff',
-                          }}
-                >
+                <div style={{ marginTop: '8px' }}>
                     <input
                         type="text"
                         placeholder="Type here..."
-                        onKeyPress={this.handleInputKeyPress}
-                        style={{ width: '100%', padding: '4px' }}
+                        onChange={this.handleInputChange}
+                        style={{ padding: '4px', width: '100%' }}
                     />
                 </div>
-
             </div>}
             <VPControls />
             <BackgroundTaskProgress />
