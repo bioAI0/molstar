@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <title>doi.bio {{host}}</title>
+        <style>
+            html, body {
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            #app {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" href="/css/molstar.css" />
+    </head>
+    <body>
+        <div
+            id="my-fullscreen-overlay"
+            style="position: fixed; top: 0; left: 0; right: 0; bottom: 60px; background-color: rgba(0, 0, 0, 0.2); z-index: 9999; pointer-events: none;"
+        >
+            <div style="padding: 16px; color: #fff;">
+                {{{body}}}
+            </div>
+        </div>
+
+        <div id="app"></div>
+        <script type="text/javascript" src="/js/molstar.js"></script>
+        <script type="text/javascript">
+            function getParam(name, regex) {
+                var r = new RegExp(name + '=' + '(' + regex + ')[&]?', 'i');
+                return decodeURIComponent(((window.location.search || '').match(r) || [])[1] || '');
+            }
+            var pdbqt = getParam('pdbqt', '[^&]+').trim() || '../../examples/ace2.pdbqt';
+            var mol2 = getParam('mol2', '[^&]+').trim() || '../../examples/ace2-hit.mol2';
+
+            DockingViewer.create('app', [0x33DD22, 0x1133EE], true).then(viewer => {
+                viewer.loadStructuresFromUrlsAndMerge([
+                    { url: pdbqt, format: 'pdbqt' },
+                    { url: mol2, format: 'mol2' }
+                ]);
+            });
+        </script>
+    </body>
+</html>
+
+
+
+

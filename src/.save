@@ -1,0 +1,97 @@
+const { getMarkdownFile } = require('./contentHelper');
+const path = require('path');
+
+function processRequest(res, absolutePath, req, host) {
+    let layout = 'main';
+    let view = 'showdown';
+
+    // Check if the path ends with '.pdf'
+    if (absolutePath.endsWith('.pdf')) {
+        // Serve the PDF directly, assuming res.sendFile is the right method
+        return res.sendFile(absolutePath);
+    }
+
+    if (absolutePath.endsWith('.json.md')) {
+        layout = 'json';
+        view = 'jsonshow';
+    } else if (absolutePath.endsWith('.ads.md')) {
+        layout = 'ads';
+        view = 'adshow';
+    } 
+
+    const iframeUrl = req.path + ".ads";
+    let out = getMarkdownFile(absolutePath);
+    
+    if (out !== false) {
+        res.render(view, {
+            content: out,
+            title: req.path,
+            host: host,
+            iframeUrl: iframeUrl,
+            layout: layout
+        });
+    } else {
+        res.status(404).send(' ');
+    }
+}
+
+module.exports = processRequest;
+
+
+------------------------------
+
+const showdown = require('showdown');
+
+const sameLinkTextExtension = {
+    type: 'lang',
+    regex: /\[\[([^\]]+)\]\]/g,
+    replace: '<a href="/$1">$1</a>',
+};
+
+const differentLinkTextExtension = {
+    type: 'lang',
+    regex: /\[\[([^\|]+)\|([^\]]+)\]\]/g,
+    replace: '<a href="/$1">$2</a>',
+};
+
+const converter = new showdown.Converter({
+    extensions: [differentLinkTextExtension, sameLinkTextExtension],
+});
+
+module.exports = converter;
+
+
+** Fri Jul 05 2024 - 09:31:16 AM
+
+describe('contentHelper', () => {
+    it('should get a file', () => {
+        expect(true).toEqual(true);
+        contentHelper.getFile("./
+    });
+});
+
+
+------------------------------------------
+const fs = require('fs');
+const converter = require('./converter');
+
+const MAXSIZE = 1000000;
+
+function getFile(absolutePath) {
+    if (fs.existsSync(absolutePath) && fs.statSync(absolutePath).isFile()) {
+        const fd = fs.openSync(absolutePath, 'r');
+        const buffer = Buffer.alloc(MAXSIZE);
+        const bytesRead = fs.readSync(fd, buffer, 0, MAXSIZE, 0);
+        fs.closeSync(fd);
+
+        const data = buffer.toString('utf8', 0, bytesRead);
+        const out = converter.makeHtml(data);
+        return out;
+    } else {
+        return false;
+    }
+}
+
+module.exports = {
+    getFile
+};

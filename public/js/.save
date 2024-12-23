@@ -1,0 +1,2 @@
+    console.log('%cYou are in a forest.\nYou see trees here.\nA sphinx of wonder appears to you!\nWelcome to adventure #1!\nIn this adventure, you are\nto find *TREASURES* and\nstore them away. To see \nhow well you are doing\ntype "SCORE".  Remember\nyou can always say "HELP\nWhat do you want to do?', 'color: green');
+    

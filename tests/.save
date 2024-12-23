@@ -1,0 +1,229 @@
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const app = require('../server'); // Import your Express app
+
+chai.use(chaiHttp);
+const expect = chai.expect;
+
+describe('Express App Tests', () => {
+  it('should return a 200 OK status on the home route', (done) => {
+    chai
+      .request(app)
+      .get('/')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+describe('Express App Tests', () => {
+
+  it('should return a 200 OK status on the sness.localhost subdomain route', (done) => {
+    chai
+      .request(app)
+      .get('/')
+      .set('Host', 'sness.localhost')
+      .end((err, res) => {
+        expect(res).to.have.status(200);
+        done();
+      });
+  });
+});
+
+------------------------------
+
+** Fri Jul 05 2024 - 16:06:24 PM
+
+
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
+const app = require('../server');
+
+chai.use(chaiHttp);
+const { expect } = chai;
+
+describe('Express App Tests', () => {
+    it('should return a 200 OK status and a title of "root" on the home route', (done) => {
+        chai
+            .request(app)
+            .get('/')
+            .set('Host', 'localhost')
+            .end((err, res) => {
+                expect(res).to.have.status(200);
+                const $ = cheerio.load(res.text);
+                expect($('title').text()).to.equal('doi.bio root');
+                done();
+            });
+    });
+
+    it('should return content for root', (done) => {
+        chai
+            .request(app)
+            .get('/')
+            .set('Host', 'localhost')
+            .end((err, res) => {
+                expect(res).to.have.status(200);
+                const $ = cheerio.load(res.text);
+                expect($('li:first').text()).to.equal('');
+                done();
+            });
+    });
+    
+    it('should return a 200 OK status and a title of "sness" on the sness.localhost subdomain route', (done) => {
+        chai
+            .request(app)
+            .get('/')
+            .set('Host', 'sness.localhost')
+            .end((err, res) => {
+                expect(res).to.have.status(200);
+                const $ = cheerio.load(res.text);
+                expect($('title').text()).to.equal('doi.bio sness');
+                done();
+            });
+    });
+
+    it('should return content for sness', (done) => {
+        chai
+            .request(app)
+            .get('/')
+            .set('Host', 'sness.localhost')
+            .end((err, res) => {
+                expect(res).to.have.status(200);
+                const $ = cheerio.load(res.text);
+                expect($('li:first').text()).to.equal('test123');
+                done();
+            });
+    });
+
+it('should test JavaScript functionality', async () => {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        // Go to the home page
+        await page.goto('http://localhost:3000');
+
+        // Test Escape key
+        await page.keyboard.press('Escape');
+        const isInputFocused = await page.evaluate(() => document.querySelector('input[type="text"]') === document.activeElement);
+        expect(isInputFocused).to.be.true;
+
+        // Test Home key
+        await page.keyboard.press('Home');
+        const scrollYHome = await page.evaluate(() => window.scrollY);
+        expect(scrollYHome).to.equal(0);
+
+        // Test End key
+        await page.keyboard.press('End');
+        const scrollYEnd = await page.evaluate(() => window.scrollY);
+        const scrollHeight = await page.evaluate(() => document.body.scrollHeight);
+        expect(scrollYEnd).to.equal(scrollHeight - window.innerHeight);
+
+        await browser.close();
+    });
+    
+});
+
+
+------------------------------
+
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
+const app = require('../server');
+const http = require('http');
+
+chai.use(chaiHttp);
+const { expect } = chai;
+
+let server;
+before((done) => {
+    server = http.createServer(app).listen(3000, done);
+});
+
+after((done) => {
+    server.close(done);
+});
+
+describe('Express App Tests', () => {
+    it('should return a 200 OK status and a title of "root" on the home route', (done) => {
+        chai
+            .request(app)
+            .get('/')
+            .set('Host', 'localhost')
+            .end((err, res) => {
+                expect(res).to.have.status(200);
+                const $ = cheerio.load(res.text);
+                expect($('title').text()).to.equal('doi.bio root');
+                done();
+            });
+    });
+
+    it('should return content for root', (done) => {
+        chai
+            .request(app)
+            .get('/')
+            .set('Host', 'localhost')
+            .end((err, res) => {
+                expect(res).to.have.status(200);
+                const $ = cheerio.load(res.text);
+                expect($('li:first').text()).to.equal('alternate doi resolver');
+                done();
+            });
+    });
+    
+    it('should return a 200 OK status and a title of "sness" on the sness.localhost subdomain route', (done) => {
+        chai
+            .request(app)
+            .get('/')
+            .set('Host', 'sness.localhost')
+            .end((err, res) => {
+                expect(res).to.have.status(200);
+                const $ = cheerio.load(res.text);
+                expect($('title').text()).to.equal('doi.bio sness');
+                done();
+            });
+    });
+
+    it('should return content for sness', (done) => {
+        chai
+            .request(app)
+            .get('/')
+            .set('Host', 'sness.localhost')
+            .end((err, res) => {
+                expect(res).to.have.status(200);
+                const $ = cheerio.load(res.text);
+                expect($('li:first').text()).to.equal('test123');
+                done();
+            });
+    });
+
+    it('should test JavaScript functionality', async () => {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        // Go to the home page
+        await page.goto('http://localhost:3000');
+
+        // Test Escape key
+        await page.keyboard.press('Escape');
+        const isInputFocused = await page.evaluate(() => document.querySelector('input[type="text"]') === document.activeElement);
+        expect(isInputFocused).to.be.true;
+
+        // Test Home key
+        await page.keyboard.press('Home');
+        const scrollYHome = await page.evaluate(() => window.scrollY);
+        expect(scrollYHome).to.equal(0);
+
+        // Test End key
+        await page.keyboard.press('End');
+        const scrollYEnd = await page.evaluate(() => window.scrollY);
+        const scrollHeight = await page.evaluate(() => document.body.scrollHeight);
+        expect(scrollYEnd).to.equal(scrollHeight - window.innerHeight);
+
+        await browser.close();
+    });
+});

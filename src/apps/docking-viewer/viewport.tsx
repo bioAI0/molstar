@@ -96,24 +96,6 @@ export class ViewportComponent extends PluginUIComponent {
         return <>
             <Viewport />
 
-            <div
-                id="my-fullscreen-overlay"
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: '60px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                    zIndex: 9999,
-                    pointerEvents: 'none',
-                    display: this.showButtons ? 'block' : 'none',
-                }}
-            >
-                <div style={{ padding: '16px', color: '#fff' }}>
-                    <p>Overlay Placeholder Text</p>
-                </div>
-            </div>
 
             {this.showButtons && (
                 <div className='msp-viewport-top-left-controls'>
