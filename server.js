@@ -1,11 +1,11 @@
 const express = require('express');
 const path = require('path');
-const { getHost, getBasePath, getFilePath} = require('./src/subdomainHelper');
-const { getMarkdownFile } = require('./src/contentHelper');
-const processRequest = require('./src/requestProcessor');
+const { getHost, getBasePath, getFilePath} = require('./src/doi/subdomainHelper');
+const { getMarkdownFile } = require('./src/doi/contentHelper');
+const processRequest = require('./src/doi/requestProcessor');
 const vhost = require('vhost');
 const app = express();
-const port = 3000;
+const port = 4000;
 const handlebars  = require('express-handlebars');
 
 app.engine('handlebars', handlebars.engine());

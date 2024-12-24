@@ -1,0 +1,1 @@
+../../build/docking-viewer/molstar.js
