@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const { getHost, getBasePath, getFilePath } = require('../src/doi/subdomainHelper');
+=======
+const { getHost, getBasePath, getFilePath } = require('../src/subdomainHelper');
+>>>>>>> 57f622e23f6f8cfc4649188e8f55dc10c0e5453b
 const prefix = 'vaults/';
 
 describe('getHost', () => {

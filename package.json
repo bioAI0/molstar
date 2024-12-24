@@ -11,9 +11,12 @@
         "url": "https://github.com/molstar/molstar/issues"
     },
     "scripts": {
+<<<<<<< HEAD
         "sstart": "node server.js",
         "stest": "mocha tests/*.test.js",
         "sjest": "npx jest __tests__",
+=======
+>>>>>>> 57f622e23f6f8cfc4649188e8f55dc10c0e5453b
         "lint": "eslint .",
         "lint-fix": "eslint . --fix",
         "test": "npm install --no-save \"gl@^6.0.2\" && npm run lint && jest",
@@ -121,11 +124,14 @@
     ],
     "license": "MIT",
     "devDependencies": {
+<<<<<<< HEAD
         "chai": "^4.3.10",
         "chai-http": "^4.4.0",
         "jest": "^29.7.0",
         "mocha": "^10.2.0",
         "supertest": "^6.3.3",
+=======
+>>>>>>> 57f622e23f6f8cfc4649188e8f55dc10c0e5453b
         "@types/cors": "^2.8.17",
         "@types/gl": "^6.0.5",
         "@types/jest": "^29.5.14",

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const converter = require('../src/doi/converter');
+=======
+const converter = require('../src/converter');
+>>>>>>> 57f622e23f6f8cfc4649188e8f55dc10c0e5453b
 
 describe('makeHtml', () => {
     it('should convert html', () => {

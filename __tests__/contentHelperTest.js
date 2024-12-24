@@ -1,7 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+<<<<<<< HEAD
 const converter = require('../src/doi/converter');
 const contentHelper = require('../src/doi/contentHelper');
+=======
+const converter = require('../src/converter');
+const contentHelper = require('../src/contentHelper');
+>>>>>>> 57f622e23f6f8cfc4649188e8f55dc10c0e5453b
 
 const MAXSIZE = 1000000
 

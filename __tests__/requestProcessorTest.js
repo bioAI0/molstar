@@ -1,6 +1,11 @@
 const path = require('path');
+<<<<<<< HEAD
 const contentHelper = require('../src/doi/contentHelper');
 const requestProcessor = require('../src/doi/requestProcessor');
+=======
+const contentHelper = require('../src/contentHelper');
+const requestProcessor = require('../src/requestProcessor');
+>>>>>>> 57f622e23f6f8cfc4649188e8f55dc10c0e5453b
 
 jest.mock('../src/contentHelper');
 
