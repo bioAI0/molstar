@@ -1,12 +1,13 @@
-const path = require('path');
-const contentHelper = require('../contentHelper');
-const requestProcessor = require('../requestProcessor');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import path from 'path';
+import { getMarkdownFile } from '../contentHelper';
+import { processRequest } from '../requestProcessor';
 
 jest.mock('../contentHelper');
 
 describe('requestProcessor', () => {
-    let mockRes;
-    let mockReq;
+    let mockRes: any;
+    let mockReq: any;
     const host = 'localhost';
     const display_host = 'localhost';
 
@@ -14,7 +15,8 @@ describe('requestProcessor', () => {
         mockRes = {
             render: jest.fn(),
             status: jest.fn().mockReturnThis(),
-            send: jest.fn()
+            send: jest.fn(),
+            sendFile: jest.fn() // Make sure we can spy on sendFile
         };
 
         mockReq = {
@@ -24,9 +26,9 @@ describe('requestProcessor', () => {
 
     test('should render with main layout and showdown view for non .ads.md paths', () => {
         const absolutePath = path.join(__dirname, 'file.md');
-        contentHelper.getMarkdownFile.mockReturnValue('<p>HTML content</p>');
+        (getMarkdownFile as jest.Mock).mockReturnValue('<p>HTML content</p>');
 
-        requestProcessor(mockRes, absolutePath, mockReq, host, display_host);
+        processRequest(mockRes, absolutePath, mockReq, host, display_host);
 
         expect(mockRes.render).toHaveBeenCalledWith('showdown', {
             content: '<p>HTML content</p>',
@@ -42,9 +44,9 @@ describe('requestProcessor', () => {
 
     test('should render with ads layout and adshow view for .ads.md paths', () => {
         const absolutePath = path.join(__dirname, 'advertisement.ads.md');
-        contentHelper.getMarkdownFile.mockReturnValue('<p>Advertisement HTML</p>');
+        (getMarkdownFile as jest.Mock).mockReturnValue('<p>Advertisement HTML</p>');
 
-        requestProcessor(mockRes, absolutePath, mockReq, host, display_host);
+        processRequest(mockRes, absolutePath, mockReq, host, display_host);
 
         expect(mockRes.render).toHaveBeenCalledWith('adshow', {
             content: '<p>Advertisement HTML</p>',
@@ -60,9 +62,9 @@ describe('requestProcessor', () => {
 
     test('should send a 404 response when file does not exist', () => {
         const absolutePath = path.join(__dirname, 'nonExistentFile.md');
-        contentHelper.getMarkdownFile.mockReturnValue(false);
+        (getMarkdownFile as jest.Mock).mockReturnValue(false);
 
-        requestProcessor(mockRes, absolutePath, mockReq, host);
+        processRequest(mockRes, absolutePath, mockReq, host);
 
         expect(mockRes.status).toHaveBeenCalledWith(404);
         expect(mockRes.send).toHaveBeenCalledWith(' ');
@@ -72,12 +74,8 @@ describe('requestProcessor', () => {
     test('should send the raw PDF file for .pdf paths', () => {
         const absolutePath = path.join(__dirname, 'document.pdf');
 
-        // Mocking sendFile method to just capture the call
-        mockRes.sendFile = jest.fn();
+        processRequest(mockRes, absolutePath, mockReq, host);
 
-        requestProcessor(mockRes, absolutePath, mockReq, host);
-
-        // Check that sendFile was called with the correct absolute path
         expect(mockRes.sendFile).toHaveBeenCalledWith(absolutePath);
         expect(mockRes.render).not.toHaveBeenCalled();
         expect(mockRes.status).not.toHaveBeenCalled();
@@ -87,16 +85,11 @@ describe('requestProcessor', () => {
     test('should send the raw JSON file for .json paths', () => {
         const absolutePath = path.join(__dirname, 'document.json');
 
-        // Mocking sendFile method to just capture the call
-        mockRes.sendFile = jest.fn();
+        processRequest(mockRes, absolutePath, mockReq, host);
 
-        requestProcessor(mockRes, absolutePath, mockReq, host);
-
-        // Check that sendFile was called with the correct absolute path
         expect(mockRes.sendFile).toHaveBeenCalledWith(absolutePath);
         expect(mockRes.render).not.toHaveBeenCalled();
         expect(mockRes.status).not.toHaveBeenCalled();
         expect(mockRes.send).not.toHaveBeenCalled();
     });
-
 });
