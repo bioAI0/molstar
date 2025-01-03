@@ -1,5 +1,5 @@
 // test/subdomainHelper.test.ts
-import { getHost, getBasePath, getFilePath } from '../src/subdomainHelper';
+import { getHost, getBasePath, getFilePath } from '../subdomainHelper';
 
 // Use the same prefix as in the helper file for consistency
 const prefix = 'vaults/';
