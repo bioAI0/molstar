@@ -20,6 +20,8 @@ export function processRequest(
     let layout = 'main';
     let view = 'showdown';
 
+    console.log("absolutePath1=",absolutePath);
+
     if (absolutePath.endsWith('.pdf')) {
         res.sendFile(absolutePath);
         return;
@@ -35,6 +37,16 @@ export function processRequest(
         return;
     }
 
+    if (absolutePath.endsWith('.js')) {
+        res.sendFile(absolutePath);
+        return;
+    }
+
+    if (absolutePath.endsWith('.css')) {
+        res.sendFile(absolutePath);
+        return;
+    }
+
     if (absolutePath.endsWith('.json')) {
         res.sendFile(absolutePath);
         return;
@@ -45,7 +57,7 @@ export function processRequest(
         view = 'adshow';
     }
 
-    const iframeUrl = req.path + '.ads';
+   const iframeUrl = req.path + '.ads';
     const out = getMarkdownFile(absolutePath);
 
     let display_host = '';

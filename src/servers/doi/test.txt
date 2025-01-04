@@ -1,0 +1,43 @@
+// server.ts
+
+import path from 'path';
+import vhost from 'vhost';
+import handlebars from 'express-handlebars';
+
+// If these modules are JavaScript files, you may need to create your own type 
+// definitions or use "any" if typings aren't available:
+import { getHost, getBasePath, getFilePath } from './src/subdomainHelper';
+import { getMarkdownFile } from './src/contentHelper';
+import processRequest from './src/requestProcessor'; // or however this is exported
+
+const app: Application = express();
+const port = 3000;
+
+app.engine('handlebars', handlebars.engine());
+app.set('view engine', 'handlebars');
+app.set('views', './views');
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Define the handler for your subdomains
+function handleSubdomain(req: Request, res: Response, next: NextFunction): void {
+    const host = getHost(req);
+    const basePath = getBasePath(req, host);
+    const filePath = getFilePath(req, basePath);
+    const absolutePath = path.join(__dirname, filePath);
+
+    // Pass everything to your custom request processor
+    processRequest(res, absolutePath, req, host);
+}
+
+// Attach the handler to various vhosts
+app.use(vhost('*.*', handleSubdomain));
+app.use(vhost('*.doi.bio', handleSubdomain));
+app.use(vhost('localhost', handleSubdomain));
+
+// Start the server
+app.listen(port, () => {
+    console.log(`App listening on port ${port}!`);
+});
+
+// Export the app if needed for testing or external usage
+export default app;

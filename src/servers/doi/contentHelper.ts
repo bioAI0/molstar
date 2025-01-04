@@ -32,7 +32,7 @@ export function getMarkdownFile(absolutePath: string): string | false {
             }
             processedData += line + '\n';
         }
-
+        
         const out = converter.makeHtml(processedData);
         return out;
     } else {
