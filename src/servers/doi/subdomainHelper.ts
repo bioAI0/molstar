@@ -49,10 +49,6 @@ export function getFilePath(req: Req, basePath: string): string {
 
   if (filePath.endsWith('.pdf')) {
     return filePath;
-  } else if (filePath.endsWith('.js')) {
-      return filePath;
-  } else if (filePath.endsWith('.css')) {
-      return filePath;
   } else if (filePath.endsWith('.json')) {
     return filePath;
   } else if (filePath.endsWith('.pdbqt')) {

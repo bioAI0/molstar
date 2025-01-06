@@ -37,16 +37,6 @@ export function processRequest(
         return;
     }
 
-    if (absolutePath.endsWith('.js')) {
-        res.sendFile(absolutePath);
-        return;
-    }
-
-    if (absolutePath.endsWith('.css')) {
-        res.sendFile(absolutePath);
-        return;
-    }
-
     if (absolutePath.endsWith('.json')) {
         res.sendFile(absolutePath);
         return;
