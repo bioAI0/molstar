@@ -12,17 +12,17 @@ import { StateObjectRef } from '../../mol-state';
 import { Material } from '../../mol-util/material';
 
 function shinyStyle(plugin: PluginContext) {
-    return PluginCommands.Canvas3D.SetSettings(plugin, { settings: {
-        renderer: {
-            ...plugin.canvas3d!.props.renderer,
-        },
-        postprocessing: {
-            ...plugin.canvas3d!.props.postprocessing,
-            occlusion: { name: 'off', params: {} },
-            shadow: { name: 'off', params: {} },
-            outline: { name: 'off', params: {} },
-        }
-    } });
+return PluginCommands.Canvas3D.SetSettings(plugin, { settings: {
+renderer: {
+...plugin.canvas3d!.props.renderer,
+},
+postprocessing: {
+...plugin.canvas3d!.props.postprocessing,
+occlusion: { name: 'off', params: {} },
+shadow: { name: 'off', params: {} },
+outline: { name: 'off', params: {} },
+}
+} });
 }
 
 const PresetParams = {
@@ -67,12 +67,15 @@ export class ViewportComponent extends PluginUIComponent {
             const value = event.currentTarget.value;
             console.log('Enter pressed. Input Value:', value);
             this.processInput(value);
-            debugger;
         }
     };
 
     processInput = (value: string) => {
         console.log('Processing Input:', value);
+        if (value === 'd') {
+           console.log("deleting all structures");
+           this.plugin.managers.structure.component.clear(this.plugin.managers.structure.component.currentStructures);
+    }
     };
 
     async _set(structures: readonly StructureRef[], preset: StructureRepresentationPresetProvider) {
