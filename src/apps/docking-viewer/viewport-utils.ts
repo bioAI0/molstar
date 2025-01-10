@@ -8,11 +8,34 @@ import {
     StructureRepresentationPresetProvider,
     presetStaticComponent
 } from '../../mol-plugin-state/builder/structure/representation-preset'
+import { PluginUIContext } from '../../mol-plugin-ui/context';
+import { Asset } from '../../mol-util/assets';
 
-// No longer importing "Color" if we don't need it
-// import { Color } from '../../mol-util/color'  // REMOVED
+export function processTextInput(plugin: PluginUIContext, value: string) {
+    //debugger;
+    console.log('Processing Input:', value);
+    if (value === 'd') {
+        console.log('Deleting all structures...');
+        plugin.managers.structure.component.clear(plugin.managers.structure.component.currentStructures);
+    }
+    if (value === 'l') {
+        loadTest(plugin);
+    }
+}
 
-/** Turn off fancy postprocessing for a "shiny" style. */
+async function loadTest(plugin: PluginContext) {
+    const url = `https://www.ebi.ac.uk/pdbe/static/entry/1erm_updated.cif`;
+    const format = 'mmcif';
+    const data = await plugin.builders.data.download({ url: Asset.Url(url) });
+    const trajectory = await plugin.builders.structure.parseTrajectory(data as any, format as any);
+    const model = await plugin.builders.structure.createModel(trajectory as any);
+    const assemblyId = '';
+    const structure = await plugin.builders.structure.createStructure(model as any, assemblyId ? { name: 'assembly', params: { id: assemblyId } } : void 0);
+    const all = await plugin.builders.structure.tryCreateComponentStatic(structure, 'all');
+    if (all) await plugin.builders.structure.representation.addRepresentation(all, { type: 'ball-and-stick', color: 'element-symbol', colorParams: { carbonColor: { name: 'element-symbol', params: {} } } });
+
+}
+
 export function shinyStyle(plugin: PluginContext) {
     return PluginCommands.Canvas3D.SetSettings(plugin, {
         settings: {
@@ -29,17 +52,14 @@ export function shinyStyle(plugin: PluginContext) {
     });
 }
 
-/** A custom material. */
 export const CustomMaterial = Material({ roughness: 0.2, metalness: 0 });
 
-/** The plugin config key for showing/hiding the buttons. */
 export const ShowButtons = PluginConfig.item('showButtons', true);
 
 const PresetParams = {
     ...StructureRepresentationPresetProvider.CommonParams,
 };
 
-/** The specialized "StructurePreset". */
 export const StructurePreset = StructureRepresentationPresetProvider({
     id: 'preset-structure',
     display: { name: 'Structure' },

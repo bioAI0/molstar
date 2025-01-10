@@ -7,29 +7,15 @@ import { Toasts } from '../../mol-plugin-ui/toast';
 import { Viewport, ViewportControls } from '../../mol-plugin-ui/viewport';
 import { StructureRepresentationPresetProvider } from '../../mol-plugin-state/builder/structure/representation-preset';
 import { StructureRef } from '../../mol-plugin-state/manager/structure/hierarchy-state';
-
-// Now import from './viewport-utils' only what you actually use
-import {
-    ShowButtons,
-    StructurePreset
-} from './viewport-utils';
+import {ShowButtons, StructurePreset} from './viewport-utils';
+import { processTextInput } from './viewport-utils';
 
 export class ViewportComponent extends PluginUIComponent {
     handleInputKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             const value = event.currentTarget.value;
-            console.log('Enter pressed. Input Value:', value);
-            this.processInput(value);
-        }
-    };
-
-    processInput = (value: string) => {
-        console.log('Processing Input:', value);
-        if (value === 'd') {
-            console.log("deleting all structures");
-            this.plugin.managers.structure.component.clear(
-                this.plugin.managers.structure.component.currentStructures
-            );
+            processTextInput(this.plugin, value);
+            debugger;
         }
     };
 
