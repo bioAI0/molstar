@@ -12,29 +12,52 @@ import { PluginUIContext } from '../../mol-plugin-ui/context';
 import { Asset } from '../../mol-util/assets';
 
 export function processTextInput(plugin: PluginUIContext, value: string) {
-    //debugger;
     console.log('Processing Input:', value);
-    if (value === 'd') {
-        console.log('Deleting all structures...');
-        plugin.managers.structure.component.clear(plugin.managers.structure.component.currentStructures);
+
+    // Split user input. e.g. if user types "l 1erm", parts = ["l", "1erm"]
+    const parts = value.split(' ');
+
+    // If user typed 'd'
+    if (parts[0] === 'd') {
+        plugin.managers.structure.component.clear(
+            plugin.managers.structure.component.currentStructures
+        );
     }
-    if (value === 'l') {
-        loadTest(plugin);
+
+    // If user typed 'l <pdbId>'
+    if (parts[0] === 'l') {
+        // The second part is the PDB ID, e.g. "1erm"
+        const pdbId = parts[1] ? parts[1].toLowerCase() : '1erm';
+
+        // Pass the pdbId (e.g. "1erm") into loadTest
+        loadTest(plugin, pdbId);
     }
 }
 
-async function loadTest(plugin: PluginContext) {
-    const url = `https://www.ebi.ac.uk/pdbe/static/entry/1erm_updated.cif`;
+// Updated loadTest function accepts an extra parameter `pdbId`
+async function loadTest(plugin: PluginContext, pdbId: string) {
+    const url = `https://www.ebi.ac.uk/pdbe/static/entry/${pdbId}_updated.cif`;
     const format = 'mmcif';
+
+    // Same code as before
     const data = await plugin.builders.data.download({ url: Asset.Url(url) });
     const trajectory = await plugin.builders.structure.parseTrajectory(data as any, format as any);
     const model = await plugin.builders.structure.createModel(trajectory as any);
     const assemblyId = '';
-    const structure = await plugin.builders.structure.createStructure(model as any, assemblyId ? { name: 'assembly', params: { id: assemblyId } } : void 0);
+    const structure = await plugin.builders.structure.createStructure(
+        model as any, 
+        assemblyId ? { name: 'assembly', params: { id: assemblyId } } : void 0
+    );
     const all = await plugin.builders.structure.tryCreateComponentStatic(structure, 'all');
-    if (all) await plugin.builders.structure.representation.addRepresentation(all, { type: 'ball-and-stick', color: 'element-symbol', colorParams: { carbonColor: { name: 'element-symbol', params: {} } } });
-
+    if (all) {
+        await plugin.builders.structure.representation.addRepresentation(all, {
+            type: 'ball-and-stick',
+            color: 'element-symbol',
+            colorParams: { carbonColor: { name: 'element-symbol', params: {} } },
+        });
+    }
 }
+
 
 export function shinyStyle(plugin: PluginContext) {
     return PluginCommands.Canvas3D.SetSettings(plugin, {
