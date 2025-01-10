@@ -15,7 +15,6 @@ export class ViewportComponent extends PluginUIComponent {
         if (event.key === 'Enter') {
             const value = event.currentTarget.value;
             processTextInput(this.plugin, value);
-            debugger;
         }
     };
 
