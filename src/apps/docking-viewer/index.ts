@@ -5,6 +5,7 @@
  * @author Alexander Rose <alexander.rose@weirdbyte.de>
  */
 
+//import { ShowButtons, StructurePreset } from './viewport-utils';
 import { Structure } from '../../mol-model/structure';
 import { BuiltInTrajectoryFormat } from '../../mol-plugin-state/formats/trajectory';
 import { PluginStateObject as PSO, PluginStateTransform } from '../../mol-plugin-state/objects';
@@ -24,8 +25,9 @@ import { ColorNames } from '../../mol-util/color/names';
 import { ParamDefinition as PD } from '../../mol-util/param-definition';
 import '../../mol-util/polyfill';
 import { ObjectKeys } from '../../mol-util/type-helpers';
-import './index.html';
-import { ShowButtons, StructurePreset, ViewportComponent } from './viewport';
+//import './index.html';
+import { ViewportComponent } from './viewport';
+import { ShowButtons, StructurePreset } from './viewport-utils';
 
 require('mol-plugin-ui/skin/light.scss');
 
