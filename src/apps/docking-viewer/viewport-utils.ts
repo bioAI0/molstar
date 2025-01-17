@@ -12,34 +12,24 @@ import { PluginUIContext } from '../../mol-plugin-ui/context';
 import { Asset } from '../../mol-util/assets';
 
 export function processTextInput(plugin: PluginUIContext, value: string) {
-    console.log('Processing Input:', value);
-
-    // Split user input. e.g. if user types "l 1erm", parts = ["l", "1erm"]
+    debugger;
     const parts = value.split(' ');
 
-    // If user typed 'd'
     if (parts[0] === 'd') {
         plugin.managers.structure.component.clear(
             plugin.managers.structure.component.currentStructures
         );
     }
 
-    // If user typed 'l <pdbId>'
     if (parts[0] === 'l') {
-        // The second part is the PDB ID, e.g. "1erm"
         const pdbId = parts[1] ? parts[1].toLowerCase() : '1erm';
-
-        // Pass the pdbId (e.g. "1erm") into loadTest
-        loadTest(plugin, pdbId);
+        load(plugin, pdbId);
     }
 }
 
-// Updated loadTest function accepts an extra parameter `pdbId`
-async function loadTest(plugin: PluginContext, pdbId: string) {
+async function load(plugin: PluginContext, pdbId: string) {
     const url = `https://www.ebi.ac.uk/pdbe/static/entry/${pdbId}_updated.cif`;
     const format = 'mmcif';
-
-    // Same code as before
     const data = await plugin.builders.data.download({ url: Asset.Url(url) });
     const trajectory = await plugin.builders.structure.parseTrajectory(data as any, format as any);
     const model = await plugin.builders.structure.createModel(trajectory as any);
