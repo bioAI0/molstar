@@ -94,17 +94,6 @@ function parseRange(c: string, s: string[], e: number): ResidueListSelectionEntr
     }
     return { kind: 'range', asym_id: c, seq_id_beg: +s[0], seq_id_end: e };
 }
-
-function parseInsCode(e?: string) {
-    if (!e) return [];
-    return e.split(':');
-}
-
-function parseResidueListSelection(input: string): ResidueListSelectionEntry[] {
-    return input.split(',') // A 1-3, B 3 => [A 1-3, B 3]
-        .map(e => e.trim().split(/\s+|[-]/g).filter(e => !!e)) // [A 1-3, B 3] => [[A, 1, 3], [B, 3]]
-        .map(e => parseRange(e[0], parseInsCode(e[1]), +e[2]))
-        .filter(e => !!e) as ResidueListSelectionEntry[];
 }
 
 function parseAtomListSelection(input: string): [number, number][] {
